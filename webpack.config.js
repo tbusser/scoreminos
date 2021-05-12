@@ -124,7 +124,7 @@ module.exports = function build(env, args) {
 			path: path.join(__dirname, 'dist'),
 			chunkFilename: 'chunks/[id].js',
 			filename: 'js/main.[contenthash:8].js',
-			publicPath: path.resolve(__dirname, 'dist')
+			publicPath: ''
 		},
 
 		plugins,
