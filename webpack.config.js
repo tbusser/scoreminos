@@ -8,27 +8,29 @@ const path = require('path');
 /* ========================================================================== */
 
 function getPlugins(mode) {
-	return (mode === 'production')
+	return mode === 'production'
 		? [
-			new CleanWebpackPlugin(),
+				new CleanWebpackPlugin({
+					cleanOnceBeforeBuildPatterns: ['**/*', '!.git/**']
+				}),
 
-			new MiniCssExtractPlugin({
-				filename: 'css/main.[contenthash:8].css'
-			}),
+				new MiniCssExtractPlugin({
+					filename: 'css/main.[contenthash:8].css'
+				}),
 
-			new HtmlWebpackPlugin({
-				inject: true,
-				template: './src/index.html'
-			})
-		]
+				new HtmlWebpackPlugin({
+					inject: true,
+					template: './src/index.html'
+				})
+		  ]
 		: [
-			new CleanWebpackPlugin(),
+				new CleanWebpackPlugin(),
 
-			new HtmlWebpackPlugin({
-				inject: true,
-				template: './src/index.html'
-			})
-		]
+				new HtmlWebpackPlugin({
+					inject: true,
+					template: './src/index.html'
+				})
+		  ];
 }
 
 /* ========================================================================== */
@@ -73,7 +75,7 @@ module.exports = function build(env, args) {
 					use: [
 						devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
 						{
-							loader: 'css-loader',
+							loader: 'css-loader'
 						},
 						{
 							loader: 'sass-loader',
@@ -109,7 +111,7 @@ module.exports = function build(env, args) {
 					options: {
 						limit: 8192
 					},
-					test: /\.ttf$/,
+					test: /\.ttf$/
 				},
 				{
 					test: /\.(jpe?g|png|gif|svg)$/,
@@ -135,7 +137,7 @@ module.exports = function build(env, args) {
 			],
 			plugins: [new TsconfigPathsPlugin()]
 		}
-	}
+	};
 
 	return config;
 };
