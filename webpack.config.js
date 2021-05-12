@@ -53,6 +53,7 @@ module.exports = function build(env, args) {
 			host: '0.0.0.0',
 			hot: true,
 			port: 1337,
+			public: '0.0.0.0:8080',
 			publicPath: path.resolve(__dirname, 'dist'),
 			// Set watchContentBase to true to ensure HMR works when an included
 			// HTML partial is changed.
@@ -73,7 +74,14 @@ module.exports = function build(env, args) {
 					include: path.resolve(__dirname, 'src/styles'),
 					test: /\.scss$/,
 					use: [
-						devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+						devMode
+							? 'style-loader'
+							: {
+									loader: MiniCssExtractPlugin.loader,
+									options: {
+										publicPath: '../'
+									}
+							  },
 						{
 							loader: 'css-loader'
 						},
