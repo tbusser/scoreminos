@@ -1,0 +1,17 @@
+.c-slider {
+	display: flex;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+
+	&::after {
+		content: '';
+		min-width: getSpacing();
+	}
+
+	/* -- ELEMENTS ---------------------------------------------------------- */
+	&__slide {
+		flex-shrink: 0;
+		margin-left: getSpacing();
+		scroll-snap-align: center;
+	}
+}

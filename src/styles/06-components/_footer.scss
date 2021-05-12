@@ -1,0 +1,7 @@
+.c-footer {
+	border-top: 1px solid #e8e8e8;
+	box-shadow: 0 0 1em #e8e8e8;
+	display: flex;
+	justify-content: space-between;
+	padding: getSpacing(.5) getSpacing();
+}

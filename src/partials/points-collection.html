@@ -1,0 +1,29 @@
+<article class="o-view js-point-collection" hidden>
+	<header class="js-header o-view__header c-header">
+		<h1 class="js-header__title c-header__title">Select a player</h1>
+		<span class="js-header__subtitle c-header__subtitle">Collect points</span>
+	</header>
+	<div class="o-view__content">
+		<p class="c-message c-message--informative">
+			Calculate per player the total score of their leftover tiles.
+		</p>
+		<ol class="js-point-collection__list">
+
+		</ol>
+		<p class="js-message c-message c-message--warning" id="warning-points-missing" hidden>
+			Please specify the number of points each player has left.
+		</p>
+		<div class="js-point-collection__fly-out o-fly-in">
+			<div class="js-point-collection__number-entry">
+				<include src="./partials/number-entry.html"></include>
+			</div>
+			<div style="margin-top: 20px; text-align: center;">
+				<button style="width: 50%" type="button" class="js-point-collection__set-points c-button c-button--primary">Set points</button>
+			</div>
+		</div>
+	</div>
+	<article class="js-footer o-view__footer c-footer">
+		<span></span>
+		<button class="js-footer__primary c-button c-button--primary">Next</button>
+	</article>
+</article>

@@ -1,0 +1,20 @@
+<article class="o-view js-point-limit" hidden>
+	<header class="js-header o-view__header c-header">
+		<h1 class="js-header__title c-header__title">Points limit</h1>
+	</header>
+	<div class="o-view__content">
+		<p class="c-message c-message--informative">
+			Set the number of points for a player to reach in order to trigger the last round.
+		</p>
+		<div class="js-point-limit__number-entry">
+			<include src="./partials/number-entry.html"></include>
+		</div>
+		<p class="js-message c-message c-message--warning" id="warning-invalid-points-limit" hidden>
+			The points limit has to be between 100 and 1000, please update the limit to continue.
+		</p>
+	</div>
+	<article class="js-footer o-view__footer c-footer">
+		<button class="js-footer__secondary c-button c-button--secondary">Back</button>
+		<button class="js-footer__primary c-button c-button--primary">Next</button>
+	</article>
+</article>

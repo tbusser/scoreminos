@@ -1,0 +1,47 @@
+.o-view {
+	flex-shrink: 0;
+	overflow-x: hidden;
+	position: relative;
+
+	@include mq($until: tablet) {
+		display: grid;
+		grid-template-areas:
+			"header"
+			"content"
+			"footer";
+		grid-template-rows: min-content auto min-content;
+		width: 100vw;
+	}
+
+	&__content {
+		grid-area: content;
+		overflow-x: hidden;
+		overflow-y: auto;
+		padding: getSpacing();
+		position: relative;
+
+		&--center-vertically {
+			align-self: center;
+		}
+
+		&--static-position {
+			position: static;
+		}
+	}
+
+	&__content-breakout {
+		margin: 0 getSpacing(-1);
+	}
+
+	&__footer {
+		grid-area: footer;
+	}
+
+	&__header {
+		grid-area: header;
+	}
+
+	&[hidden] {
+		display: none;
+	}
+}

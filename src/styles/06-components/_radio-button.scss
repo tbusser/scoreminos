@@ -1,0 +1,59 @@
+.c-radio-button {
+	$base: &;
+
+	&__button {
+		border: 1px solid #ced4da;
+		border-radius: var(--border-radius);
+		display: block;
+		padding: getSpacing(.5) getSpacing(1) getSpacing(.5) getSpacing(2);
+		position: relative;
+		transition: border-color .2s ease-out;
+		width: 100%;
+
+		&::after,
+		&::before {
+			border-radius: 50%;
+			bottom: 0;
+			content: '';
+			display: block;
+			margin: auto;
+			position: absolute;
+			top: 0;
+		}
+
+		&::before {
+			border-color: #ced4da;
+			border-style: solid;
+			border-width: 1px;;
+			height: 20px;
+			left: getSpacing(.5);
+			transition: border-color .2s ease-out;
+			width: 20px;
+		}
+
+		&::after {
+			background-color: #0069d9;
+			height: 14px;
+			left: 13px;
+			opacity: 0;
+			transition: opacity .2s ease-out;
+			width: 14px;
+		}
+	}
+
+	&__input {
+		display: none;
+
+		&:checked + #{$base}__button {
+			border-color: #0069d9;
+
+			&::before {
+				border-color: #0069d9;
+			}
+
+			&::after {
+				opacity: 1;
+			}
+		}
+	}
+}

@@ -1,0 +1,114 @@
+@import
+	"01-settings/color",
+	"01-settings/font-face",
+	"01-settings/font-family",
+	"01-settings/global";
+
+@import
+	"02-tools/functions/spacing",
+	"02-tools/mixins/mq",
+	"02-tools/mixins/truncate-text";
+
+@import
+	"03-generic/box-sizing";
+
+@import
+	"04-elements/body",
+	"04-elements/heading",
+	"04-elements/html",
+	"04-elements/list",
+	"04-elements/page",
+	"04-elements/paragraph";
+
+@import
+	"05-objects/structure",
+	"05-objects/view";
+
+@import
+	"06-components/button",
+	"06-components/check-button",
+	"06-components/dialog",
+	"06-components/footer",
+	"06-components/header",
+	"06-components/leaderboard",
+	"06-components/input",
+	"06-components/message",
+	"06-components/number-pad",
+	"06-components/radio-button",
+	"06-components/score-button",
+	"06-components/slider";
+
+th.active {
+	color: blue;
+}
+
+.c-card {
+	border: 1px solid #e8e8e8;
+	border-radius: var(--border-radius);
+	padding: getSpacing(.5);
+	width: 75vw;
+}
+
+.c-winner-dialog {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+
+	&__icon {
+		font-size: 4em;
+		line-height: 1;
+		margin-bottom: getSpacing(2);
+	}
+
+	&__text {
+		font-size: 1.25em;
+		text-align: center;
+	}
+
+	&__button {
+		margin-top: getSpacing(1);
+	}
+}
+
+.o-fly-in {
+	--fly-in-duration: .3s;
+	background-color: white;
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	transform: translateX(100%);
+	transition: transform var(--fly-in-duration) ease-out;
+	z-index: 1;
+
+	&.is-visible {
+		transform: translateX(0);
+	}
+
+	&--bottom {
+		top: unset;
+		transform: translateY(100%);
+
+		&.is-visible {
+			transform: translateY(0);
+		}
+	}
+}
+
+.c-pop-in {
+	// border-top: 1px solid;
+	border-radius: 20px 20px 0 0;
+
+	overflow: hidden;
+	padding-bottom: 20px;
+
+	&__header {
+		background-color: blue;
+		height: 60px;
+	}
+
+	&.is-visible {
+		box-shadow: 0 0 1em rgba(0, 0, 0, .5);
+	}
+}

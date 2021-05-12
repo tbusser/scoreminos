@@ -1,0 +1,14 @@
+.c-message {
+	border-radius: var(--border-radius);
+	padding: getSpacing(.5);
+
+	&--warning {
+		background-color: rgba(#dc3545, .05);
+		border: 1px solid rgba(#dc3545, .5);
+	}
+
+	&--informative {
+		background-color: rgba(#007bff, .05);
+		border: 1px solid rgba(#007bff, .5);
+	}
+}

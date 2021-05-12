@@ -1,0 +1,42 @@
+.c-number-pad {
+	display: grid;
+	grid-template-areas:
+		"k1			k2		k3"
+		"k4 		k5		k6"
+		"k7 		k8 		k9"
+		"empty	k0	backspace";
+	gap: getSpacing(1);
+	justify-items: center;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 280px;
+
+	&__button {
+		border-radius: 50%;
+		font-size: 1.25em;
+		height: 70px;
+		touch-action: manipulation;
+		width: 70px;
+
+		&[data-value="1"] { grid-area: k1; }
+		&[data-value="2"] { grid-area: k2; }
+		&[data-value="3"] { grid-area: k3; }
+		&[data-value="4"] { grid-area: k4; }
+		&[data-value="5"] { grid-area: k5; }
+		&[data-value="6"] { grid-area: k6; }
+		&[data-value="7"] { grid-area: k7; }
+		&[data-value="8"] { grid-area: k8; }
+		&[data-value="9"] { grid-area: k9; }
+		&[data-value="0"] { grid-area: k0; }
+		&[data-action="backspace"] { grid-area: backspace; }
+		&[data-action="clear"] { grid-area: empty; }
+	}
+
+	&__display {
+		font-size: 4em;
+		letter-spacing: .25em;
+		margin-bottom: getSpacing(1);
+		text-indent: .25em;
+		text-align: center;
+	}
+}

@@ -1,0 +1,42 @@
+<template id="dialog-game-winner">
+	<div class="c-winner-dialog">
+		<p class="c-winner-dialog__icon">🏆</p>
+		<p class="c-winner-dialog__text">
+			The game was won by <strong data-placeholder="name"></strong> with a grand total of <strong data-placeholder="score"></strong> points!
+		</p>
+		<button class="js-dialog__close c-winner-dialog__button c-button c-button--primary-outline">Show leaderboard</button>
+	</div>
+</template>
+
+<template id="dialog-last-round">
+	<div class="c-winner-dialog">
+		<p class="c-winner-dialog__icon">🔔</p>
+		<p class="c-winner-dialog__text">
+			<strong data-placeholder="name"></strong> has reached the limit of <strong data-placeholder="limit"></strong> points. This is the last round.
+		</p>
+		<button class="js-dialog__close c-winner-dialog__button c-button c-button--primary-outline">Got it!</button>
+	</div>
+</template>
+
+<template id="dialog-round-winner">
+	<div class="c-winner-dialog">
+		<p class="c-winner-dialog__icon">🏅</p>
+		<p class="c-winner-dialog__text">
+			The round was won by <strong data-placeholder="name"></strong> who has received <strong data-placeholder="points"></strong> point(s) from the other player(s).
+		</p>
+		<button class="js-dialog__close c-winner-dialog__button c-button c-button--primary-outline">Start next round</button>
+	</div>
+</template>
+
+<template id="dialog-turn-played">
+	<div class="c-winner-dialog">
+		<p class="c-winner-dialog__icon">📔</p>
+		<p class="c-winner-dialog__text">
+			<strong data-placeholder="name"></strong> now has <strong data-placeholder="score"></strong> points (<strong data-placeholder="delta"></strong>).
+		</p>
+		<button class="js-dialog__close c-winner-dialog__button c-button c-button--primary c-button--timed">
+			<span class="c-button__progress"></span>
+			<span class="c-button__content">Next player!</span>
+		</button>
+	</div>
+</template>

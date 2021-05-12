@@ -1,0 +1,7 @@
+@function getSpacing($size: 1) {
+	@if $size == 1 {
+		@return var(--global-spacing);
+	} @else {
+		@return calc(var(--global-spacing) * #{$size})
+	}
+}

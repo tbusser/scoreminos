@@ -1,0 +1,8 @@
+ol {
+	list-style-type: none;
+	padding: 0;
+
+	li + li {
+		margin-top: getSpacing(1);
+	}
+}

@@ -1,0 +1,33 @@
+.c-header {
+	border-bottom: 1px solid #e8e8e8;
+	box-shadow: 0 0 1em #e8e8e8;
+	max-width: 100vw;
+	padding: getSpacing(1) getSpacing(.5);
+
+
+	/* -- ELEMENTS ---------------------------------------------------------- */
+	&__subtitle,
+	&__title {
+		@include truncate-text();
+		text-align: center;
+	}
+
+	&__subtitle {
+		display: block;
+		font-size: .75em;
+		line-height: 1.25;
+		margin-top: getSpacing(.25);
+
+	}
+
+	&__title {
+		line-height: 1;
+		margin: 0;
+	}
+
+
+	/* -- STATE CLASSES ----------------------------------------------------- */
+	&--has-subtitle {
+		padding: getSpacing(.5);
+	}
+}

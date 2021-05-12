@@ -1,0 +1,19 @@
+.c-leaderboard {
+	text-align: left;
+	width: 100%;
+
+	tr > td:first-child {
+		font-size: 2em;
+		line-height: 1;
+		text-align: center;
+		width: 2ch;
+	}
+
+	tr > td {
+		line-height: 50px;
+	}
+
+	tr:nth-child(odd) > td {
+		background-color: rgba(bisque,.5);
+	}
+}

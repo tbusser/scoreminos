@@ -1,0 +1,73 @@
+.c-check-button {
+	$base: &;
+
+	&__button {
+		border: 1px solid #ced4da;
+		border-radius: var(--border-radius);
+		display: inline-block;
+		padding: getSpacing(.5) getSpacing(1) getSpacing(.5) getSpacing(2);
+		position: relative;
+		transition: border-color .2s ease-out;
+
+		&::after,
+		&::before {
+			border-radius: var(--border-radius);
+			bottom: 0;
+			content: '';
+			display: block;
+			margin: auto;
+			position: absolute;
+			top: 0;
+		}
+
+		&::before {
+			background-color: rgba(255,255,255,0);
+			border-color: #ced4da;
+			border-style: solid;
+			border-width: 1px;;
+			height: 20px;
+			left: getSpacing(.5);
+			transition: border-color .2s ease-out, background-color .2s ease-out;
+			width: 20px;
+		}
+
+		&::after {
+			--borderWidth: 4px;
+			--borderColor: #fff;
+
+			border-bottom: var(--borderWidth) solid var(--borderColor);
+			border-right: var(--borderWidth) solid var(--borderColor);
+
+			color: #0069d9;
+			height: 14px;
+			left: 16px;
+			opacity: 0;
+			text-align: center;
+			transform: rotate(45deg);
+			transition: opacity .2s ease-out;
+			width: 8px;
+
+		}
+	}
+
+	&__input {
+		display: none;
+
+		&:checked + #{$base}__button {
+			border-color: #0069d9;
+
+			&::before {
+				background-color: #0069d9;
+				border-color: #0069d9;
+			}
+
+			&::after {
+				opacity: 1;
+			}
+		}
+
+		&:disabled + #{$base}__button {
+			opacity: .5;
+		}
+	}
+}

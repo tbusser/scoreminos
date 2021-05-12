@@ -1,0 +1,70 @@
+<article class="o-view js-round" hidden>
+	<header class="js-header o-view__header c-header c-header--has-subtitle">
+		<h1 class="js-header__title c-header__title">Play round</h1>
+		<span class="js-header__subtitle c-header__subtitle">turn in progress</span>
+	</header>
+	<div class="js-turn-input o-view__content">
+		<article class="js-game-summary"></article>
+		<div class="js-turn-input__number-entry">
+			<include src="./partials/number-entry.html"></include>
+		</div>
+
+		<div class="js-turn-input__played-triple-container" style="margin-top: 20px;">
+			<input type="checkbox" value="1" id="played-triple" class="js-turn-input__played-triple c-check-button__input">
+			<label for="played-triple" class="c-check-button__button">
+				The played tile is a triple, all sides have the same value.
+			</label>
+		</div>
+
+		<div class="o-view__content-breakout c-slider">
+
+			<div class="js-turn-input__drawn-tiles c-slider__slide">
+				<div class="c-card">
+					<h2>Tiles drawn</h2>
+					<div>
+						<input type="checkbox" value="1" id="tiles_drawn_1" class="c-check-button__input">
+						<label for="tiles_drawn_1" class="c-check-button__button">1 tile</label>
+					</div>
+					<div>
+						<input type="checkbox" value="2" id="tiles_drawn_2" class="c-check-button__input">
+						<label for="tiles_drawn_2" class="c-check-button__button">2 tiles</label>
+					</div>
+					<div>
+						<input type="checkbox" value="3" id="tiles_drawn_3" class="c-check-button__input">
+						<label for="tiles_drawn_3" class="c-check-button__button">3 tiles</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="js-turn-input__completed-shape c-slider__slide">
+				<div class="c-card">
+					<h2>Completed shape</h2>
+					<div>
+						<input type="checkbox" value="bridge" id="completed-shape_bridge" class="c-check-button__input">
+						<label for="completed-shape_bridge" class="c-check-button__button"><img src="static/images/bridge.png" alt=""> Bridge</label>
+					</div>
+					<div>
+						<input type="checkbox" value="double-sided" id="completed-shape_double-sided" class="c-check-button__input">
+						<label for="completed-shape_double-sided" class="c-check-button__button"><img src="static/images/double-sided.png" alt=""> Double sided</label>
+					</div>
+					<div>
+						<input type="checkbox" value="hexagon" id="completed-shape_hexagon" class="c-check-button__input">
+						<label for="completed-shape_hexagon" class="c-check-button__button"><img src="static/images/hexagon.png" alt=""> Hexagon</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="js-round__fly-out o-fly-in">
+			<div class="js-round__leaderboard">
+
+			</div>
+			<div style="margin-top: 20px; text-align: center;">
+				<button style="width: 50%" type="button" class="js-round__fly-out-close c-button c-button--primary">Close</button>
+			</div>
+		</div>
+	</div>
+	<article class="js-footer o-view__footer c-footer">
+		<button class="js-footer__secondary c-button c-button--secondary">Leaderboard</button>
+		<button class="js-footer__primary c-button c-button--primary">Play</button>
+	</article>
+</article>
