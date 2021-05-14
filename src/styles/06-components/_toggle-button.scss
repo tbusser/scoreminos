@@ -1,0 +1,34 @@
+.c-toggle-button {
+	$base: &;
+
+	&__button {
+		background-color: transparent;
+		border: 1px solid #ced4da;
+		border-radius: var(--border-radius);
+		color: currentColor;
+		display: block;
+		line-height: 1.2;
+		padding: getSpacing(.5) getSpacing(1);
+		position: relative;
+		text-align: center;
+		transition:
+			background-color .2s ease-out,
+			border-color .2s ease-out,
+			color .2s ease-out;
+	}
+
+	&__image {
+		margin-bottom: getSpacing(.5);
+	}
+
+	&__input {
+		display: none;
+
+		&:checked + #{$base}__button {
+			background-color: #007bff;
+			border-color: #007bff;
+			box-shadow: 0 0 getSpacing(.5) rgba(0, 0, 0, .2);
+			color: #fff
+		}
+	}
+}

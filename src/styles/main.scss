@@ -18,7 +18,8 @@
 	"04-elements/html",
 	"04-elements/list",
 	"04-elements/page",
-	"04-elements/paragraph";
+	"04-elements/paragraph",
+	"04-elements/section";
 
 @import
 	"05-objects/structure",
@@ -36,7 +37,8 @@
 	"06-components/number-pad",
 	"06-components/radio-button",
 	"06-components/score-button",
-	"06-components/slider";
+	"06-components/slider",
+	"06-components/toggle-button";
 
 th.active {
 	color: blue;
@@ -111,4 +113,8 @@ th.active {
 	&.is-visible {
 		box-shadow: 0 0 1em rgba(0, 0, 0, .5);
 	}
+}
+
+.u-margin-bottom--half {
+	margin-bottom: getSpacing(.5);
 }

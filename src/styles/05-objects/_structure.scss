@@ -6,6 +6,22 @@
 		flex-grow: 1;
 	}
 
+	&--no-grow {
+		flex-grow: 0;
+	}
+
+	&--no-shrink {
+		flex-shrink: 0;
+	}
+
+	&--single-gap {
+		gap: getSpacing(1);
+	}
+
+	&--space-between {
+		justify-content: space-between;
+	}
+
 	&--vertical {
 		flex-direction: column;
 	}
