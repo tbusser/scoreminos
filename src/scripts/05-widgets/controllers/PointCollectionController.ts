@@ -80,7 +80,9 @@ export class PointCollectionController extends BaseController {
 
 	@bind
 	private onSetPoints(): void {
-		this.selectedPlayer.points = this.numberEntry.value;
+		if (this.numberEntry.value !== 0) {
+			this.selectedPlayer.points = this.numberEntry.value;
+		}
 		this.renderPlayersList();
 		this.flyIn?.hide();
 		this.header.title = this.config.translations.headerPrompt;
@@ -128,7 +130,7 @@ export class PointCollectionController extends BaseController {
 				<p class="o-structure o-structure--vertical o-structure--grow">
 					<span class="c-score-button__name">${name}</span>
 					${hasEmptyHand ? '<span>Round winner</span>' : ''}
-					${points === 0 ? '<span>No points set</span>' : ''}
+					${points === undefined ? '<span>No points set</span>' : ''}
 				</p>
 				${(points ?? 0) === 0 ? '' : `<p class="c-score-button__score">${points}</p>`}
 				${hasEmptyHand ? '' : '<p class="c-score-button__chevron">❯</p>'}
