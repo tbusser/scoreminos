@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -24,7 +26,9 @@ function getPlugins(mode) {
 				})
 		  ]
 		: [
-				new CleanWebpackPlugin(),
+				new CleanWebpackPlugin({
+					cleanOnceBeforeBuildPatterns: ['**/*', '!.git/**']
+				}),
 
 				new HtmlWebpackPlugin({
 					inject: true,
@@ -53,7 +57,6 @@ module.exports = function build(env, args) {
 			host: '0.0.0.0',
 			hot: true,
 			port: 1337,
-			public: '0.0.0.0:8080',
 			publicPath: path.resolve(__dirname, 'dist'),
 			// Set watchContentBase to true to ensure HMR works when an included
 			// HTML partial is changed.
@@ -122,6 +125,9 @@ module.exports = function build(env, args) {
 					test: /\.ttf$/
 				},
 				{
+					generator: {
+						filename: '[hash][ext][query]'
+					},
 					test: /\.(jpe?g|png|gif|svg)$/,
 					type: 'asset/resource'
 				}
