@@ -36,10 +36,9 @@ export class NumberPad {
 	get value(): number | undefined {
 		return this._value === '' ? undefined : parseInt(this._value, 10);
 	}
-	set value(value: number) {
-		if (Number.isFinite(value)) {
-			this._value = value.toString();
-		}
+	set value(value: number | undefined) {
+		// @ts-ignore value can't be undefined as we check if it is finite.
+		this._value = Number.isFinite(value) ? value.toString() : '';
 	}
 
 	/* -- EVENT HANDLING ---------------------------------------------------- */

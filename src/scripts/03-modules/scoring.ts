@@ -33,18 +33,20 @@ function calculateScore(turn: Turn): number {
 }
 
 function calculateTileDelta(turn: Turn): number {
-	const points = turn.points ?? 0;
-	const tilePlayed = points === 0 ? 0 : -1;
+	const tilePlayed = turn.points === undefined ? 0 : -1;
 
 	return tilePlayed + (turn.tilesDrawn ?? 0);
 }
 
 function scoreDefaultTurn(turn: Turn): number {
-	return turn.points === undefined
-		? getDrawnTilesPenalty(turn.tilesDrawn) + getPassPenalty()
-		: turn.points +
-				getShapeBonus(turn.completedShape) +
-				getDrawnTilesPenalty(turn.tilesDrawn);
+	const passPenalty = turn.points === undefined ? getPassPenalty() : 0;
+
+	return (
+		(turn.points ?? 0) +
+		getShapeBonus(turn.completedShape) +
+		getDrawnTilesPenalty(turn.tilesDrawn) +
+		passPenalty
+	);
 }
 
 function scoreRoundStart(turn: Turn): number {

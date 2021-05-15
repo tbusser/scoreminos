@@ -59,7 +59,7 @@ export class TurnInput {
 
 	/* -- EVENT HANDLING ---------------------------------------------------- */
 	@bind
-	private onPointsChanged(value: number): void {
+	private onPointsChanged(value: number | undefined): void {
 		if (this.turnType !== TurnType.RoundStart) {
 			return;
 		}
@@ -67,7 +67,7 @@ export class TurnInput {
 		const element = this.base.querySelector(
 			selector.playedTriple
 		) as HTMLInputElement;
-		element.disabled = value % 3 !== 0;
+		element.disabled = (value ?? 0) % 3 !== 0;
 	}
 
 	/* -- PRIVATE METHODS --------------------------------------------------- */

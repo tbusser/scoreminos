@@ -4,7 +4,7 @@ import { NumberPad } from '04-components/NumberPad';
 /* == INTERFACES ============================================================ */
 interface Configuration {
 	defaultPoints?: number;
-	onPointsChanged?: (value: number) => void;
+	onPointsChanged?: (value: number | undefined) => void;
 	selectors: Selectors;
 }
 
@@ -12,9 +12,6 @@ interface Selectors {
 	display: string;
 	numberPad: string;
 }
-
-/* == CONSTANTS ============================================================= */
-const defaultValue = 0;
 
 /* == CLASS ================================================================= */
 export class NumberEntry {
@@ -24,28 +21,34 @@ export class NumberEntry {
 	}
 
 	/* -- PRIVATE FIELDS ---------------------------------------------------- */
-	private display: HTMLElement;
-	private numberPad: NumberPad;
+	private display: HTMLElement | undefined;
+	private numberPad: NumberPad | undefined;
 
 	/* -- INSTANCE PROPERTIES ----------------------------------------------- */
 	get value(): number | undefined {
-		return this.numberPad.value;
+		return this.numberPad?.value;
 	}
-	set value(value: number) {
+	set value(value: number | undefined) {
+		if (this.numberPad === undefined) {
+			return;
+		}
+
 		this.numberPad.value = value;
 		this.showPoints(value);
 	}
 
 	/* -- EVENT HANDLING ---------------------------------------------------- */
 	@bind
-	private onPointsChanged(value: number): void {
+	private onPointsChanged(value: number | undefined): void {
 		this.showPoints(value);
 		this.configuration.onPointsChanged?.(value);
 	}
 
 	/* -- PRIVATE METHODS --------------------------------------------------- */
 	private setup(): void {
-		this.display = this.base.querySelector(this.configuration.selectors.display);
+		this.display = this.base.querySelector(
+			this.configuration.selectors.display
+		) as HTMLElement;
 
 		const numberPadBase = this.base.querySelector(
 			this.configuration.selectors.numberPad
@@ -54,21 +57,19 @@ export class NumberEntry {
 			this.numberPad = new NumberPad(numberPadBase, this.onPointsChanged);
 		}
 
-		if (this.configuration.defaultPoints !== undefined) {
-			this.value = this.configuration.defaultPoints;
-		}
+		this.value = this.configuration.defaultPoints;
 	}
 
-	private showPoints(points: number): void {
+	private showPoints(points: number | undefined): void {
 		if (!this.display) {
 			return;
 		}
 
-		this.display.textContent = points?.toString() ?? '0';
+		this.display.textContent = points?.toString() ?? '--';
 	}
 
 	/* -- PULBIC METHODS ---------------------------------------------------- */
 	reset(): void {
-		this.value = defaultValue;
+		this.value = this.configuration.defaultPoints;
 	}
 }

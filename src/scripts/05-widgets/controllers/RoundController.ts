@@ -60,7 +60,7 @@ export class RoundController extends BaseController {
 	}
 	private set activePlayer(player: PlayerSummary) {
 		this._activePlayer = player;
-		this.header.title = player.name;
+		this.header.title = player?.name;
 	}
 
 	private get roundType(): RoundType {
@@ -146,7 +146,7 @@ export class RoundController extends BaseController {
 		playerManager.updateActivePlayerTileCount(turnSummary.tileDelta);
 		this.config.onTurnSubmitted?.(turnSummary);
 
-		if (turn.points === 0) {
+		if (turn.points === undefined) {
 			this.processPassedTurn();
 		} else {
 			this.processPlayedTurn();
