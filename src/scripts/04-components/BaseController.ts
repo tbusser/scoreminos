@@ -26,6 +26,13 @@ export class BaseController {
 		this.base.hidden = !value;
 	}
 
+	get secondaryActionTitle(): string {
+		return this.footer.secondaryTitle;
+	}
+	set secondaryActionTitle(value: string) {
+		this.footer.secondaryTitle = value;
+	}
+
 	/* -- PROTECTED METHODS ------------------------------------------------- */
 	protected onSecondaryAction(): void {
 		// noop'

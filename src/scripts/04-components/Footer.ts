@@ -77,6 +77,17 @@ export class Footer {
 
 		this.secondaryButton.disabled = !value;
 	}
+
+	get secondaryTitle(): string {
+		return this.secondaryButton?.textContent ?? '';
+	}
+	set secondaryTitle(value: string) {
+		if (this.secondaryButton === null) {
+			return;
+		}
+
+		this.secondaryButton.textContent = value;
+	}
 }
 
 /* == EXPORTS =============================================================== */
