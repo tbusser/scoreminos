@@ -195,6 +195,8 @@ module.exports = {
 
 		'require-atomic-updates': 'off',
 
+		'@typescript-eslint/ban-ts-comment': 'off',
+
 		'@typescript-eslint/no-unused-vars': [2, { args: 'none' }],
 
 		'@typescript-eslint/no-unused-expressions': 2,
