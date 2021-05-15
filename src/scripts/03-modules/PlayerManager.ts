@@ -15,7 +15,7 @@ export class PlayerManager {
 	}
 
 	/* -- SINGLETON --------------------------------------------------------- */
-	private static _instance: PlayerManager = null;
+	private static _instance: PlayerManager | null = null;
 	static get instance(): PlayerManager {
 		if (PlayerManager._instance === null) {
 			PlayerManager._instance = new PlayerManager(singletonEnforcer);
@@ -25,8 +25,9 @@ export class PlayerManager {
 	}
 
 	/* -- FIELDS ------------------------------------------------------------ */
-	private activeIndex: number = null;
-	private _activePlayer: Player = null;
+	private activeIndex: number | null = null;
+	private _activePlayer: Player | null = null;
+	private tilesPerRound: number | undefined;
 	private _players: Player[] = [];
 
 	get activePlayer(): PlayerSummary {
@@ -72,6 +73,7 @@ export class PlayerManager {
 	createPlayers(names: Player['name'][], initialTileCount: number): void {
 		this.activeIndex = null;
 		this._activePlayer = null;
+		this.tilesPerRound = initialTileCount;
 
 		this._players = names.map(name => new Player(name, initialTileCount));
 	}
@@ -83,16 +85,21 @@ export class PlayerManager {
 		return this.players[this.activeIndex];
 	}
 
-	updateActivePlayerScore(delta: number): number {
-		return this._activePlayer.updateScore(delta);
+	resetTileCount(): void {
+		this._players.forEach(player => player.setTileCount(this.tilesPerRound ?? 0));
 	}
+
+	updateActivePlayerScore(delta: number): number {
+		return this._activePlayer?.updateScore(delta) ?? 0;
+	}
+
 	updateActivePlayerTileCount(delta: number): number {
-		return this._activePlayer.updateTileCount(delta);
+		return this._activePlayer?.updateTileCount(delta) ?? 0;
 	}
 
 	updatePlayerScore(id: Player['id'], delta: number): number {
 		const player = this._players.find(player => player.id === id);
 
-		return player?.updateScore(delta);
+		return player?.updateScore(delta) ?? 0;
 	}
 }

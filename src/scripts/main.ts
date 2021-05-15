@@ -142,9 +142,9 @@ function onInstanceActivated(step: Step): void {
 }
 
 function onPlayersSelected(names: string[]): void {
-	const initialTileCount = getInitialTileCount(names.length);
+	const tilesPerRound = getInitialTileCount(names.length);
 
-	playerManager.createPlayers(names, initialTileCount);
+	playerManager.createPlayers(names, tilesPerRound);
 	navigationManager.goForward();
 }
 
@@ -173,6 +173,8 @@ function onRoundCompleted(): void {
 
 function onStartingPlayerSelected(player: PlayerSummary): void {
 	config.startingPlayer = player;
+	playerManager.resetTileCount();
+
 	navigationManager.goForward();
 }
 

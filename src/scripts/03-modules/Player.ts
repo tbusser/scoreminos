@@ -32,6 +32,10 @@ export class Player {
 	}
 
 	/* -- PUBLIC METHODS ---------------------------------------------------- */
+	setTileCount(count: number): void {
+		this._tiles = count;
+	}
+
 	updateScore(delta: number): number {
 		this._score += delta;
 
