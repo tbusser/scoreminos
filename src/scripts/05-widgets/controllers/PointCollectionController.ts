@@ -8,7 +8,7 @@ import { PlayerSummary } from '01-global/interfaces/PlayerSummary';
 import { RemainingPoints } from '01-global/interfaces/RemainingPoints';
 import { bind } from '02-utilities/decorators/bind';
 import { updateMessageVisibility } from '03-modules/error-message';
-import { FlyOut } from '03-modules/fly-out';
+import { FlyIn } from '03-modules/fly-in';
 import { BaseController } from '04-components/BaseController';
 import { NumberEntry } from '04-components/NumberEntry';
 
@@ -50,7 +50,7 @@ export class PointCollectionController extends BaseController {
 	}
 
 	/* -- FIELDS ------------------------------------------------------------ */
-	private flyIn: FlyOut;
+	private flyIn: FlyIn;
 	private numberEntry: NumberEntry;
 	private players: Player[];
 	private selectedPlayer: Player;
@@ -154,7 +154,7 @@ export class PointCollectionController extends BaseController {
 			this.config.selectors.flyOut
 		) as HTMLElement;
 		if (flyInBase !== null) {
-			this.flyIn = new FlyOut(flyInBase);
+			this.flyIn = new FlyIn(flyInBase);
 		}
 
 		const numberEntryBase = this.base.querySelector(
@@ -162,6 +162,7 @@ export class PointCollectionController extends BaseController {
 		) as HTMLElement;
 		if (numberEntryBase !== null) {
 			this.numberEntry = new NumberEntry(numberEntryBase, {
+				defaultPoints: 0,
 				selectors: {
 					display: '.js-number-entry__display',
 					numberPad: '.js-number-entry__number-pad'
