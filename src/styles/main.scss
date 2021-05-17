@@ -2,7 +2,8 @@
 	"01-settings/color",
 	"01-settings/font-face",
 	"01-settings/font-family",
-	"01-settings/global";
+	"01-settings/global",
+	"01-settings/state-classes";
 
 @import
 	"02-tools/functions/spacing",
@@ -22,13 +23,17 @@
 	"04-elements/section";
 
 @import
+	"05-objects/fly-in",
 	"05-objects/structure",
 	"05-objects/view";
 
 @import
+	"06-components/background",
 	"06-components/button",
 	"06-components/check-button",
+	"06-components/content-container",
 	"06-components/dialog",
+	"06-components/fly-in-dialog",
 	"06-components/footer",
 	"06-components/header",
 	"06-components/leaderboard",
@@ -39,17 +44,6 @@
 	"06-components/score-button",
 	"06-components/slider",
 	"06-components/toggle-button";
-
-th.active {
-	color: blue;
-}
-
-.c-card {
-	border: 1px solid #e8e8e8;
-	border-radius: var(--border-radius);
-	padding: getSpacing(.5);
-	width: 75vw;
-}
 
 .c-winner-dialog {
 	align-items: center;
@@ -69,49 +63,6 @@ th.active {
 
 	&__button {
 		margin-top: getSpacing(1);
-	}
-}
-
-.o-fly-in {
-	--fly-in-duration: .3s;
-	background-color: white;
-	bottom: 0;
-	left: 0;
-	position: absolute;
-	right: 0;
-	top: 0;
-	transform: translateX(100%);
-	transition: transform var(--fly-in-duration) ease-out;
-	z-index: 1;
-
-	&.is-visible {
-		transform: translateX(0);
-	}
-
-	&--bottom {
-		top: unset;
-		transform: translateY(100%);
-
-		&.is-visible {
-			transform: translateY(0);
-		}
-	}
-}
-
-.c-pop-in {
-	// border-top: 1px solid;
-	border-radius: 20px 20px 0 0;
-
-	overflow: hidden;
-	padding-bottom: 20px;
-
-	&__header {
-		background-color: blue;
-		height: 60px;
-	}
-
-	&.is-visible {
-		box-shadow: 0 0 1em rgba(0, 0, 0, .5);
 	}
 }
 

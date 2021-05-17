@@ -1,0 +1,11 @@
+.c-fly-in-dialog {
+	background-color: #fff;
+	border-radius: var(--border-radius) var(--border-radius) 0 0;
+	min-height: 94%;
+	overflow: hidden;
+	padding: getSpacing(1);
+
+	&.#{$state-visible} {
+		box-shadow: 0 0 1em rgba(0, 0, 0, .5);
+	}
+}

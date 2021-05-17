@@ -1,0 +1,40 @@
+:root {
+	--fly-in-duration: .2s;
+}
+
+.o-fly-in {
+	$base: &;
+
+	bottom: 0;
+	left: 0;
+	position: fixed;
+	right: 0;
+	transition: transform var(--fly-in-duration) ease-out;
+	z-index: 1;
+
+	&:not(#{$base}--bottom) {
+		top: 0;
+		transform: translateX(100%);
+
+		&.#{$state-visible} {
+			transform: translateX(0);
+		}
+	}
+
+	&--bottom {
+		transform: translateY(100%);
+
+		&.#{$state-visible} {
+			transform: translateY(0);
+		}
+	}
+}
+
+.o-fly-in-background {
+	transform: scale(1) translateY(0);
+	transition: transform var(--fly-in-duration) ease-out;
+
+	&.is-visible {
+		transform: scale(.95) translateY(2vh);
+	}
+}

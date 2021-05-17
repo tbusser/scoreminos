@@ -1,19 +1,30 @@
 .c-leaderboard {
+	border-collapse: collapse;
+	border-spacing: 0;
 	text-align: left;
 	width: 100%;
 
 	tr > td:first-child {
 		font-size: 2em;
 		line-height: 1;
-		text-align: center;
-		width: 2ch;
+		width: 4ch;
 	}
 
-	tr > td {
+	th {
+		color: #999;
+		font-weight: normal;
+	}
+
+	tr > td,
+	tr > th {
 		line-height: 50px;
 	}
 
-	tr:nth-child(odd) > td {
-		background-color: rgba(bisque,.5);
+	tbody {
+		tr {
+			border-color: #ccc;
+			border-style: solid none;
+			border-width: 1px;
+		}
 	}
 }

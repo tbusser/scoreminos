@@ -1,0 +1,7 @@
+.c-content-container {
+	overflow: hidden;
+
+	&.#{$state-visible} {
+		border-radius: var(--border-radius) var(--border-radius) 0 0;
+	}
+}
