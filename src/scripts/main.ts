@@ -19,11 +19,13 @@ import {
 	RoundCompletedReason
 } from '05-widgets/controllers/RoundController';
 import { LeaderboardController } from '05-widgets/controllers/LeaderboardController';
+import { LeaderboardFlyInController } from '05-widgets/controllers/LeaderboardFlyInController';
 
 import { TimedButton } from '04-components/TimedButton';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {
+	leaderBoardFlyOut?: LeaderboardFlyInController;
 	limitReached: boolean;
 	pointsLimit: number;
 	round: number;
@@ -131,11 +133,15 @@ function onInstanceActivated(step: Step): void {
 			break;
 
 		case StepId.PlayerSelect:
-			(step.instance as PlayerSelectController).setPlayers(playerManager.players);
-			(step.instance as PlayerSelectController).round = config.round++;
+			preparePlayerSelect(step.instance as PlayerSelectController);
+			break;
+
+		case StepId.PointsLimit:
+			(step.instance as PointLimitController).reset();
 			break;
 
 		case StepId.Round:
+			// (step.instance as RoundController).start(Symbol());
 			(step.instance as RoundController).start(config.startingPlayer.id);
 			break;
 	}
@@ -156,6 +162,7 @@ function onPointsCollected(result: RemainingPoints[]): void {
 	playerManager.updatePlayerScore(winner.id, winner.points);
 
 	showRoundWinnerDialog(winner.points, name);
+	config.round++;
 }
 
 function onPointLimitSet(points: number): void {
@@ -169,6 +176,14 @@ function onRoundCompleted(): void {
 	}
 	config.limitReached = false;
 	navigationManager.goForward();
+}
+
+function onStartingPlayerSecondaryAction(): void {
+	if (isFirstRound()) {
+		navigationManager.goBack();
+	} else {
+		showLeaderboardFlyin();
+	}
 }
 
 function onStartingPlayerSelected(player: PlayerSummary): void {
@@ -220,6 +235,10 @@ function instanceFactory(id: string): BaseController | null {
 	}
 }
 
+function isFirstRound(): boolean {
+	return config.round === 1;
+}
+
 function showGameWinnerDialog(): void {
 	const winner = playerManager.firstRankedPlayer;
 
@@ -239,6 +258,10 @@ function showLastRoundDialog(): void {
 			limit: config.pointsLimit.toString(10)
 		}
 	});
+}
+
+function showLeaderboardFlyin(showTiles = false): void {
+	config.leaderBoardFlyOut?.showLeaderboard(playerManager.players, showTiles);
 }
 
 function showRoundWinnerDialog(points: number, name: string): void {
@@ -281,7 +304,22 @@ function showTurnPlayedDialog(delta: number, onClose): void {
 
 /* == INIT ================================================================== */
 function init(): void {
-	//
+	const leaderboardFlyoutBase = document.querySelector(
+		'.js-leaderboard-fly-out'
+	) as HTMLElement;
+
+	if (leaderboardFlyoutBase !== null) {
+		config.leaderBoardFlyOut = new LeaderboardFlyInController(
+			leaderboardFlyoutBase,
+			{
+				selectors: {
+					background: 'main',
+					board: '.js-leaderboard-fly-out__leaderboard',
+					closeTrigger: '.js-leaderboard-fly-out__close'
+				}
+			}
+		);
+	}
 }
 
 function initCollectionController(): PointCollectionController | null {
@@ -338,7 +376,7 @@ function initPointLimitController(): PointLimitController | null {
 	return base === null
 		? null
 		: new PointLimitController(base, {
-				defaultPoints: 200,
+				defaultPoints: 400,
 				isVisible: false,
 				onCancel,
 				onLimitSet: onPointLimitSet,
@@ -360,7 +398,7 @@ function initPlayerSelectController(): PlayerSelectController | null {
 		? null
 		: new PlayerSelectController(base, {
 				isVisible: false,
-				onCancel,
+				onCancel: onStartingPlayerSecondaryAction,
 				onPlayerSelected: onStartingPlayerSelected,
 				selectors: {
 					nameList: '.js-player-select__list'
@@ -376,6 +414,7 @@ function initRoundController(): RoundController | null {
 		? null
 		: new RoundController(base, {
 				onRoundCompleted: onRoundCompleted,
+				onShowLeaderboard: () => showLeaderboardFlyin(true),
 				onTurnSubmitted: onTurnSubmitted,
 				selectors: {
 					flyOut: '.js-round__fly-out',
@@ -383,6 +422,12 @@ function initRoundController(): RoundController | null {
 					leaderboard: '.js-round__leaderboard'
 				}
 		  });
+}
+
+function preparePlayerSelect(instance: PlayerSelectController): void {
+	instance.setPlayers(playerManager.players);
+	instance.secondaryActionTitle = isFirstRound() ? 'Back' : 'Leaderboard';
+	instance.round = config.round;
 }
 
 init();
