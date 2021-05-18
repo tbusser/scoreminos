@@ -12,22 +12,51 @@
 		text-align: center;
 	}
 
+	&__primary {
+		grid-area: primary;
+	}
+
+	&__secondary {
+		grid-area: secondary;
+	}
+
 	&__subtitle {
 		display: block;
+		grid-area: subtitle;
 		font-size: .75em;
 		line-height: 1.25;
 		margin-top: getSpacing(.25);
-
 	}
 
 	&__title {
+		grid-area: title;
 		line-height: 1;
 		margin: 0;
 	}
 
 
 	/* -- STATE CLASSES ----------------------------------------------------- */
+	&--has-action {
+		align-items: center;
+		display: grid;
+		grid-gap: 0 10px;
+		grid-template-areas:
+			"secondary title primary";
+		grid-template-columns: 70px auto 70px;
+		padding: getSpacing(.75) getSpacing(.5);
+
+		&.c-header--has-subtitle {
+			grid-template-areas:
+				"secondary title primary"
+				"secondary subtitle primary";
+		}
+	}
+
 	&--has-subtitle {
 		padding: getSpacing(.5);
+	}
+
+	&--no-shadow {
+		box-shadow: none;
 	}
 }
