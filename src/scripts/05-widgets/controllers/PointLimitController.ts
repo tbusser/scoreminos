@@ -61,11 +61,11 @@ export class PointLimitController extends BaseController {
 		) as HTMLElement;
 		if (numberEntryBase !== null) {
 			this.numberEntry = new NumberEntry(numberEntryBase, {
+				defaultPoints: this.config.defaultPoints,
 				selectors: {
 					display: '.js-number-entry__display',
 					numberPad: '.js-number-entry__number-pad'
-				},
-				defaultPoints: this.config.defaultPoints
+				}
 			});
 		}
 	}
@@ -74,5 +74,10 @@ export class PointLimitController extends BaseController {
 		const visibleIds = hide ? [] : [this.config.pointsValidation.warningId];
 
 		updateMessageVisibility(this.base, visibleIds);
+	}
+
+	/* -- PUBLIC METHODS ---------------------------------------------------- */
+	reset(): void {
+		this.numberEntry?.reset();
 	}
 }

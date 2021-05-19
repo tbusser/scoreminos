@@ -6,12 +6,11 @@ import { BaseController } from '04-components/BaseController';
 import { baseSelector, TurnInput } from '04-components/TurnInput/TurnInput';
 import { scoreTurn } from '03-modules/scoring';
 import { TurnSummary } from '01-global/interfaces/TurnSummary';
-import { createLeaderboard } from '03-modules/leaderboard';
-import { FlyOut } from '03-modules/fly-out';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {
 	onRoundCompleted: (reason: RoundCompletedReason) => void;
+	onShowLeaderboard: () => void;
 	onTurnSubmitted: (turnSummary: TurnSummary) => void;
 	selectors: Selectors;
 }
@@ -47,12 +46,10 @@ export class RoundController extends BaseController {
 
 	/* -- FIELDS ------------------------------------------------------------ */
 	private _activePlayer: PlayerSummary;
-	private _roundType: RoundType;
-	private leaderboardFlyout: FlyOut;
-	private leaderboard: HTMLElement;
+	private _roundType: RoundType = RoundType.Default;
 	private maxPassedTurnStreak = 0;
 	private passedTurnsStreak = 0;
-	private turnInput: TurnInput = null;
+	private turnInput: TurnInput | null = null;
 
 	/* -- INSTANCE PROPERTIES ----------------------------------------------- */
 	private get activePlayer(): PlayerSummary {
@@ -98,14 +95,7 @@ export class RoundController extends BaseController {
 	}
 
 	protected onSecondaryAction(): void {
-		if (this.leaderboard === null) {
-			return;
-		}
-
-		this.leaderboard.innerHTML = createLeaderboard(playerManager.players, {
-			includeTiles: true
-		});
-		this.leaderboardFlyout.show();
+		this.config.onShowLeaderboard?.();
 	}
 
 	/* -- PRIVATE METHODS --------------------------------------------------- */
@@ -156,36 +146,26 @@ export class RoundController extends BaseController {
 	private reset(): void {
 		this.maxPassedTurnStreak = playerManager.players.length;
 		this.passedTurnsStreak = 0;
+		this.turnInput.reset();
 	}
 
 	private setup(): void {
 		const turnBase = this.base.querySelector(baseSelector) as HTMLElement;
-		const flyOutBase = this.base.querySelector(
-			this.config.selectors.flyOut
-		) as HTMLElement;
-		const flyOutClose = this.base.querySelector(
-			this.config.selectors.flyOutClose
-		) as HTMLElement;
-		this.leaderboard = this.base.querySelector(
-			this.config.selectors.leaderboard
-		) as HTMLElement;
-
 		if (baseSelector !== null) {
 			this.turnInput = new TurnInput(turnBase);
-		}
-		if (flyOutBase !== null) {
-			this.leaderboardFlyout = new FlyOut(flyOutBase);
-			flyOutClose.addEventListener('click', () => this.leaderboardFlyout.hide());
 		}
 	}
 
 	/* -- PUBLIC METHODS ---------------------------------------------------- */
+	play(roundType: RoundType): void {
+		this.roundType = roundType;
+		this.reset();
+	}
+
 	start(startingPlayerId: PlayerSummary['id']): void {
 		this.activePlayer = playerManager.setActivePlayer(startingPlayerId);
 
-		this.reset();
-
 		this.roundType = RoundType.RoundStart;
-		this.turnInput.reset();
+		this.reset();
 	}
 }
