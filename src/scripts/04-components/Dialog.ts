@@ -27,6 +27,8 @@ const selector = {
 	portal: '#dialog-portal'
 };
 
+export const dialogCloseTriggerSelector = selector.closeTrigger;
+
 /* == CLASS ================================================================= */
 export class Dialog {
 	constructor() {

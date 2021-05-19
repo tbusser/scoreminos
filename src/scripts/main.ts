@@ -8,7 +8,6 @@ import { getInitialTileCount, getRoundBonus } from '03-modules/rules';
 import { awardRemainingPoints } from '03-modules/scoring';
 
 import { BaseController } from '04-components/BaseController';
-import { Dialog } from '04-components/Dialog';
 
 import { GameStartController } from '05-widgets/controllers/GameStartController';
 import { PlayerSelectController } from '05-widgets/controllers/PlayerSelectController';
@@ -21,7 +20,12 @@ import {
 import { LeaderboardController } from '05-widgets/controllers/LeaderboardController';
 import { LeaderboardFlyInController } from '05-widgets/controllers/LeaderboardFlyInController';
 
-import { TimedButton } from '04-components/TimedButton';
+import {
+	showGameWinnerDialog,
+	showLastRoundDialog,
+	showRoundWinnerDialog,
+	showTurnPlayedDialog
+} from '05-widgets/dialog';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {
@@ -51,14 +55,14 @@ const config: Configuration = {
 	startingPlayer: null
 };
 
-const dialogId = {
-	gameWinner: 'game-winner',
-	lastRound: 'last-round',
-	roundWinner: 'round-winner',
-	turnPlayed: 'turn-played'
-};
+// const dialogId = {
+// 	gameWinner: 'game-winner',
+// 	lastRound: 'last-round',
+// 	roundWinner: 'round-winner',
+// 	turnPlayed: 'turn-played'
+// };
 
-const dialog = new Dialog();
+// const dialog = new Dialog();
 
 // const debugPlayers: PlayerSummary[] = [
 // 	{
@@ -161,12 +165,13 @@ function onPointsCollected(result: RemainingPoints[]): void {
 
 	playerManager.updatePlayerScore(winner.id, winner.points);
 
-	showRoundWinnerDialog(winner.points, name);
+	showRoundWinnerDialog(winner.points, name, onRoundWinnerDialogClosed);
 	config.round++;
 }
 
 function onPointLimitSet(points: number): void {
 	config.pointsLimit = points;
+	config.limitReached = false;
 	navigationManager.goForward();
 }
 
@@ -174,8 +179,20 @@ function onRoundCompleted(): void {
 	if (config.roundReason === RoundCompletedReason.RoundWon) {
 		playerManager.updateActivePlayerScore(getRoundBonus());
 	}
-	config.limitReached = false;
 	navigationManager.goForward();
+}
+
+function onRoundWinnerDialogClosed(): void {
+	if (config.limitReached) {
+		const winner = playerManager.firstRankedPlayer;
+
+		setTimeout(
+			() => showGameWinnerDialog(winner, () => navigationManager.goForward()),
+			0
+		);
+	} else {
+		navigationManager.goTo(StepId.PlayerSelect);
+	}
 }
 
 function onStartingPlayerSecondaryAction(): void {
@@ -195,13 +212,20 @@ function onStartingPlayerSelected(player: PlayerSummary): void {
 
 function onTurnSubmitted(turn: TurnSummary): void {
 	const canShowLimitDialog = !config.limitReached;
+	const currentPlayer = playerManager.activePlayer;
 
 	config.limitReached =
 		config.limitReached || playerManager.activePlayer.score >= config.pointsLimit;
 	const onClose =
-		canShowLimitDialog && config.limitReached ? showLastRoundDialog : undefined;
+		canShowLimitDialog && config.limitReached
+			? () => onTurnPlayedDialogClosed(currentPlayer)
+			: undefined;
 
-	showTurnPlayedDialog(turn.scoreDelta, onClose);
+	showTurnPlayedDialog(playerManager.activePlayer, turn.scoreDelta, onClose);
+}
+
+function onTurnPlayedDialogClosed(currentPlayer: PlayerSummary): void {
+	showLastRoundDialog(currentPlayer.name, config.pointsLimit);
 }
 
 function onStartNewGame(): void {
@@ -239,67 +263,8 @@ function isFirstRound(): boolean {
 	return config.round === 1;
 }
 
-function showGameWinnerDialog(): void {
-	const winner = playerManager.firstRankedPlayer;
-
-	dialog.showDialog(dialogId.gameWinner, {
-		onClose: () => navigationManager.goForward(),
-		placeholders: {
-			name: winner.name,
-			score: winner.score.toString(10)
-		}
-	});
-}
-
-function showLastRoundDialog(): void {
-	dialog.showDialog(dialogId.lastRound, {
-		placeholders: {
-			name: playerManager.activePlayer.name,
-			limit: config.pointsLimit.toString(10)
-		}
-	});
-}
-
 function showLeaderboardFlyin(showTiles = false): void {
 	config.leaderBoardFlyOut?.showLeaderboard(playerManager.players, showTiles);
-}
-
-function showRoundWinnerDialog(points: number, name: string): void {
-	dialog.showDialog(dialogId.roundWinner, {
-		onClose: () => {
-			if (config.limitReached) {
-				setTimeout(showGameWinnerDialog, 0);
-			} else {
-				navigationManager.goTo(StepId.PlayerSelect);
-			}
-		},
-		placeholders: {
-			name,
-			points: points.toString(10)
-		}
-	});
-}
-
-function showTurnPlayedDialog(delta: number, onClose): void {
-	const formattedDelta = `${delta > 0 ? '+' : ''}${delta}`;
-	const onBeforeShow = (content: HTMLElement) => {
-		const button = content.querySelector('.js-dialog__close') as HTMLElement;
-		if (button === null) {
-			return;
-		}
-		const timedButton = new TimedButton(button, () => dialog.hideDialog());
-		setTimeout(() => timedButton.start(), 0);
-	};
-
-	dialog.showDialog(dialogId.turnPlayed, {
-		onBeforeShow,
-		onClose,
-		placeholders: {
-			delta: formattedDelta,
-			name: playerManager.activePlayer.name,
-			score: playerManager.activePlayer.score.toString(10)
-		}
-	});
 }
 
 /* == INIT ================================================================== */
