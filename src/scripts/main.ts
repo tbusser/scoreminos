@@ -23,7 +23,7 @@ import {
 	showTurnPlayedDialog
 } from '03-domain/dialog';
 import { ManagedViewController } from '01-global/interface/ManagedViewController';
-import { RoundStatus } from '01-global/enum/RoundCompletedReason';
+import { RoundStatus } from '01-global/enum/RoundStatus';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {

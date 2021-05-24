@@ -1,5 +1,5 @@
 import { bind } from '01-global/decorator/bind';
-import { RoundStatus } from '01-global/enum/RoundCompletedReason';
+import { RoundStatus } from '01-global/enum/RoundStatus';
 import { ManagedViewController } from '01-global/interface/ManagedViewController';
 import { Turn } from '01-global/interface/Turn';
 
