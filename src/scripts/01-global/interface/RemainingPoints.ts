@@ -1,4 +1,4 @@
-import { PlayerSummary } from '01-global/interface/PlayerSummary';
+import { PlayerSummary } from '01-global/interface';
 
 /* == EXPORTS =============================================================== */
 export interface RemainingPoints {

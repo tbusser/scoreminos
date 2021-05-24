@@ -1,4 +1,4 @@
-import { PlayerSummary } from '01-global/interface/PlayerSummary';
+import { PlayerSummary } from '01-global/interface';
 import { updateMessageVisibility } from '01-global/utility/error-message';
 import { BaseController } from '02-components/BaseViewController';
 

@@ -3,8 +3,7 @@
  * - Restore header title after setting points
  */
 
-import { PlayerSummary } from '01-global/interface/PlayerSummary';
-import { RemainingPoints } from '01-global/interface/RemainingPoints';
+import { PlayerSummary, RemainingPoints } from '01-global/interface';
 import { bind } from '01-global/decorator/bind';
 import { updateMessageVisibility } from '01-global/utility/error-message';
 import { FlyIn } from '02-components/FlyIn';

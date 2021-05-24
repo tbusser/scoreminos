@@ -1,4 +1,10 @@
-import { Turn } from '01-global/interface/Turn';
+import {
+	PlayerPoints,
+	PlayerSummary,
+	RemainingPoints,
+	Turn,
+	TurnSummary
+} from '01-global/interface';
 import { TurnType } from '01-global/enum';
 import {
 	getDrawnTilesPenalty,
@@ -7,10 +13,6 @@ import {
 	getRoundBonus,
 	getShapeBonus
 } from './rules';
-import { PlayerPoints } from '01-global/interface/PlayerPoints';
-import { TurnSummary } from '01-global/interface/TurnSummary';
-import { RemainingPoints } from '01-global/interface/RemainingPoints';
-import { PlayerSummary } from '01-global/interface/PlayerSummary';
 
 /* == CONSTANTS ============================================================= */
 const dummyWinner: RemainingPoints = {

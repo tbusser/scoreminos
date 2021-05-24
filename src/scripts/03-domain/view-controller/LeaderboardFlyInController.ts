@@ -1,4 +1,4 @@
-import { PlayerSummary } from '01-global/interface/PlayerSummary';
+import { PlayerSummary } from '01-global/interface';
 import { createLeaderboard } from '02-components/leaderboard';
 import { FlyIn } from '02-components/FlyIn';
 

@@ -1,5 +1,4 @@
-import { ManagedViewController } from '01-global/interface/ManagedViewController';
-import { BaseController } from '02-components/BaseViewController';
+import { ManagedViewController } from '01-global/interface';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {

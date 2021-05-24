@@ -1,4 +1,4 @@
-import { PlayerSummary } from '01-global/interface/PlayerSummary';
+import { PlayerSummary } from '01-global/interface';
 import { bind } from '01-global/decorator/bind';
 import { Player } from '01-global/model/Player';
 

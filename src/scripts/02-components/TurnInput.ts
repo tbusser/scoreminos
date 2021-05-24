@@ -1,6 +1,5 @@
 import { Shape, TurnType } from '01-global/enum';
-
-import { Turn } from '01-global/interface/Turn';
+import { Turn } from '01-global/interface';
 import { bind } from '01-global/decorator/bind';
 import { CheckboxGroup } from '02-components/CheckboxGroup';
 import { NumberEntry } from '02-components/NumberEntry';

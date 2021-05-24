@@ -1,6 +1,5 @@
 import { RoundStatus, StepId } from '01-global/enum';
-import { PlayerSummary } from '01-global/interface/PlayerSummary';
-import { RemainingPoints } from '01-global/interface/RemainingPoints';
+import { PlayerSummary, RemainingPoints } from '01-global/interface';
 
 import { NavigationManager, Step } from '01-global/manager/NavigationManager';
 import { PlayerManager } from '01-global/manager/PlayerManager';
@@ -22,7 +21,7 @@ import {
 	showRoundWinnerDialog,
 	showTurnPlayedDialog
 } from '03-domain/dialog';
-import { ManagedViewController } from '01-global/interface/ManagedViewController';
+import { ManagedViewController } from '01-global/interface';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {

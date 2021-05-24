@@ -1,4 +1,4 @@
-import { Turn } from '01-global/interface/Turn';
+import { Turn } from '01-global/interface';
 import { TurnType } from '01-global/enum';
 import { BaseController } from '02-components/BaseViewController';
 import { baseSelector, TurnInput } from '02-components/TurnInput';

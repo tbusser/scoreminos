@@ -1,4 +1,4 @@
-import { ManagedViewController } from '01-global/interface/ManagedViewController';
+import { ManagedViewController } from '01-global/interface';
 import {
 	Header,
 	baseSelector as headerBaseSelector

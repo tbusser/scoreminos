@@ -1,4 +1,4 @@
-import { PlayerSummary } from '01-global/interface/PlayerSummary';
+import { PlayerSummary } from '01-global/interface';
 import { Dialog, dialogCloseTriggerSelector } from '02-components/Dialog';
 import { TimedButton } from '02-components/TimedButton';
 

@@ -1,4 +1,4 @@
-import { PlayerSummary } from '01-global/interface/PlayerSummary';
+import { PlayerSummary } from '01-global/interface';
 import { rankPlayers } from '01-global/utility/scoring';
 
 /* == INTERFACES ============================================================ */
