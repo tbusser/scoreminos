@@ -2,13 +2,14 @@ import { RoundStatus, StepId } from '01-global/enum';
 import {
 	ManagedViewController,
 	PlayerSummary,
-	RemainingPoints
+	RemainingPoints,
+	TurnSummary
 } from '01-global/interface';
 
 import { NavigationManager, Step } from '01-global/manager/NavigationManager';
 import { PlayerManager } from '01-global/manager/PlayerManager';
 import { getInitialTileCount, getRoundBonus } from '01-global/utility/rules';
-import { awardRemainingPoints } from '01-global/utility/scoring';
+import { awardRemainingPoints, scoreTurn } from '01-global/utility/scoring';
 
 import { GameStartController } from '03-domain/view-controller/GameStartController';
 import { LeaderboardController } from '03-domain/view-controller/LeaderboardController';
@@ -114,13 +115,6 @@ function onPointLimitSet(points: number): void {
 	navigationManager.goForward();
 }
 
-// function onRoundCompleted(): void {
-// 	if (config.roundReason === RoundCompletedReason.RoundWon) {
-// 		playerManager.updateActivePlayerScore(getRoundBonus());
-// 	}
-// 	navigationManager.goForward();
-// }
-
 function onRoundWinnerDialogClosed(): void {
 	if (config.limitReached) {
 		const winner = playerManager.firstRankedPlayer;
@@ -151,10 +145,9 @@ function onStartingPlayerSelected(player: PlayerSummary): void {
 }
 
 function onTurnSubmitted(report: TurnReport): void {
+	const summary = addScoreForActivePlayer(report);
+
 	if (report.state !== RoundStatus.InProgress) {
-		if (report.state === RoundStatus.Won) {
-			playerManager.updateActivePlayerScore(getRoundBonus());
-		}
 		navigationManager.goForward();
 
 		return;
@@ -169,7 +162,7 @@ function onTurnSubmitted(report: TurnReport): void {
 			? () => onTurnPlayedDialogClosed(activePlayer)
 			: playNextTurn;
 
-	showTurnPlayedDialog(activePlayer, report.scoreDelta, onClose);
+	showTurnPlayedDialog(activePlayer, summary.scoreDelta, onClose);
 }
 
 function onTurnPlayedDialogClosed(currentPlayer: PlayerSummary): void {
@@ -185,6 +178,18 @@ function onStartNewGame(): void {
 }
 
 /* == PRIVATE METHODS ======================================================= */
+function addScoreForActivePlayer(report: TurnReport): TurnSummary {
+	const turnSummary = scoreTurn(report);
+
+	playerManager.updateActivePlayerScore(turnSummary.scoreDelta);
+	playerManager.updateActivePlayerTileCount(turnSummary.tileDelta);
+
+	if (report.state === RoundStatus.Won) {
+		playerManager.updateActivePlayerScore(getRoundBonus());
+	}
+
+	return turnSummary;
+}
 /* eslint-disable complexity */
 function instanceFactory(id: string): ManagedViewController | null {
 	switch (id) {

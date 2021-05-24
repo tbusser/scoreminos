@@ -16,7 +16,7 @@ interface Configuration {
 	onTurnSubmitted: (report: TurnReport) => void;
 }
 
-export interface TurnReport extends TurnSummary {
+export interface TurnReport extends Turn {
 	state: RoundStatus;
 }
 
@@ -64,11 +64,11 @@ export class RoundController implements ManagedViewController {
 
 	@bind
 	private onTurnSubmitted(turn: Turn): void {
-		const turnSummary = this.processTurn(turn);
+		this.processTurn(turn);
 		this.determineStatus();
 
 		this.config.onTurnSubmitted?.({
-			...turnSummary,
+			...turn,
 			state: this.status
 		});
 	}
@@ -96,18 +96,12 @@ export class RoundController implements ManagedViewController {
 		return true;
 	}
 
-	private processTurn(turn: Turn): TurnSummary {
-		const turnSummary = scoreTurn(turn);
-		playerManager.updateActivePlayerScore(turnSummary.scoreDelta);
-		playerManager.updateActivePlayerTileCount(turnSummary.tileDelta);
-
-		if (turnSummary.tileDelta === 0) {
+	private processTurn(turn: Turn) {
+		if (turn.points === undefined) {
 			this.passedTurnStreak++;
 		} else {
 			this.passedTurnStreak = 0;
 		}
-
-		return turnSummary;
 	}
 
 	private setup() {
