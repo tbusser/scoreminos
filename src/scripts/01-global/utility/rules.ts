@@ -1,4 +1,4 @@
-import { Shape } from '01-global/enum/Shape';
+import { Shape } from '01-global/enum';
 
 /* == CONSTANTS ============================================================= */
 const tileDrawPenalty = -5;

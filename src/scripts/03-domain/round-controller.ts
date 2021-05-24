@@ -1,8 +1,7 @@
 import { bind } from '01-global/decorator/bind';
-import { RoundStatus } from '01-global/enum/RoundStatus';
 import { ManagedViewController } from '01-global/interface/ManagedViewController';
 import { Turn } from '01-global/interface/Turn';
-import { TurnType } from '01-global/enum/TurnType';
+import { RoundStatus, TurnType } from '01-global/enum';
 
 import { TurnSummary } from '01-global/interface/TurnSummary';
 import { PlayerManager } from '01-global/manager/PlayerManager';

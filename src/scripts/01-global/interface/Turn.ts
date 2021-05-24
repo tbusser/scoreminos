@@ -1,5 +1,4 @@
-import { Shape } from '01-global/enum/Shape';
-import { TurnType } from '01-global/enum';
+import { Shape, TurnType } from '01-global/enum';
 
 /* == EXPORTS =============================================================== */
 export interface Turn {

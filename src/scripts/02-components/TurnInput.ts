@@ -1,5 +1,4 @@
-import { Shape } from '01-global/enum/Shape';
-import { TurnType } from '01-global/enum/TurnType';
+import { Shape, TurnType } from '01-global/enum';
 
 import { Turn } from '01-global/interface/Turn';
 import { bind } from '01-global/decorator/bind';

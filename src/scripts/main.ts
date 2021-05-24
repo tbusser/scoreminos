@@ -1,4 +1,4 @@
-import { StepId } from '01-global/enum/StepId';
+import { RoundStatus, StepId } from '01-global/enum';
 import { PlayerSummary } from '01-global/interface/PlayerSummary';
 import { RemainingPoints } from '01-global/interface/RemainingPoints';
 
@@ -23,7 +23,6 @@ import {
 	showTurnPlayedDialog
 } from '03-domain/dialog';
 import { ManagedViewController } from '01-global/interface/ManagedViewController';
-import { RoundStatus } from '01-global/enum/RoundStatus';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {
