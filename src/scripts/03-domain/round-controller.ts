@@ -2,15 +2,13 @@ import { bind } from '01-global/decorator/bind';
 import { RoundStatus } from '01-global/enum/RoundStatus';
 import { ManagedViewController } from '01-global/interface/ManagedViewController';
 import { Turn } from '01-global/interface/Turn';
+import { TurnType } from '01-global/enum/TurnType';
 
 import { TurnSummary } from '01-global/interface/TurnSummary';
 import { PlayerManager } from '01-global/manager/PlayerManager';
 import { scoreTurn } from '01-global/utility/scoring';
 
-import {
-	RoundController as RoundViewController,
-	RoundType
-} from '03-domain/view-controller/TurnController';
+import { RoundController as RoundViewController } from '03-domain/view-controller/TurnController';
 
 /* == CONSTANTS ============================================================= */
 const playerManager = PlayerManager.instance;
@@ -94,7 +92,7 @@ export class RoundController implements ManagedViewController {
 
 		playerManager.activateNextPlayer();
 		this._viewController?.play(
-			RoundType.Default,
+			TurnType.Default,
 			playerManager.activePlayer?.name ?? ''
 		);
 
@@ -133,7 +131,7 @@ export class RoundController implements ManagedViewController {
 		this.status = RoundStatus.InProgress;
 
 		this.viewController?.play(
-			RoundType.RoundStart,
+			TurnType.RoundStart,
 			playerManager.activePlayer?.name ?? ''
 		);
 	}

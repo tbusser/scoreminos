@@ -9,12 +9,6 @@ interface Configuration {
 	onTurnSubmitted: (turnSummary: Turn) => void;
 }
 
-/* == CONSTANTS ============================================================= */
-export enum RoundType {
-	Default = 'default',
-	RoundStart = 'round-start'
-}
-
 /* == CLASS ================================================================= */
 export class RoundController extends BaseController {
 	/* -- CONSTRUCTOR ------------------------------------------------------- */
@@ -24,27 +18,27 @@ export class RoundController extends BaseController {
 	}
 
 	/* -- FIELDS ------------------------------------------------------------ */
-	private _roundType: RoundType = RoundType.Default;
+	private _turnType: TurnType = TurnType.Default;
 	private turnInput: TurnInput | null = null;
 
 	/* -- INSTANCE PROPERTIES ----------------------------------------------- */
-	private get roundType(): RoundType {
-		return this._roundType;
+	private get turnType(): TurnType {
+		return this._turnType;
 	}
-	private set roundType(value: RoundType) {
-		if (value === this._roundType) {
+	private set turnType(value: TurnType) {
+		if (value === this._turnType) {
 			return;
 		}
 
-		this._roundType = value;
+		this._turnType = value;
 
 		switch (value) {
-			case RoundType.Default:
+			case TurnType.Default:
 				this.setTurnType(TurnType.Default);
 				this.header.subtitle = 'turn in progress';
 				break;
 
-			case RoundType.RoundStart:
+			case TurnType.RoundStart:
 				this.setTurnType(TurnType.RoundStart);
 				this.header.subtitle = 'initial turn';
 				break;
@@ -82,9 +76,9 @@ export class RoundController extends BaseController {
 	}
 
 	/* -- PUBLIC METHODS ---------------------------------------------------- */
-	play(roundType: RoundType, playerName: string): void {
+	play(turnType: TurnType, playerName: string): void {
 		this.header.title = playerName;
-		this.roundType = roundType;
+		this.turnType = turnType;
 		this.reset();
 	}
 }
