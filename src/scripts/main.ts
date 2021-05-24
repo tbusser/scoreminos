@@ -1,31 +1,29 @@
-import { PlayerSummary } from '01-global/interfaces/PlayerSummary';
-import { RemainingPoints } from '01-global/interfaces/RemainingPoints';
-import { TurnSummary } from '01-global/interfaces/TurnSummary';
+import { StepId } from '01-global/enum/StepId';
+import { PlayerSummary } from '01-global/interface/PlayerSummary';
+import { RemainingPoints } from '01-global/interface/RemainingPoints';
 
-import { NavigationManager, Step } from '03-modules/NavigationManager';
-import { PlayerManager } from '03-modules/PlayerManager';
-import { getInitialTileCount, getRoundBonus } from '03-modules/rules';
-import { awardRemainingPoints } from '03-modules/scoring';
+import { NavigationManager, Step } from '01-global/manager/NavigationManager';
+import { PlayerManager } from '01-global/manager/PlayerManager';
+import { getInitialTileCount, getRoundBonus } from '01-global/utility/rules';
+import { awardRemainingPoints } from '01-global/utility/scoring';
 
-import { BaseController } from '04-components/BaseController';
+import { GameStartController } from '03-domain/view-controller/GameStartController';
+import { PlayerSelectController } from '03-domain/view-controller/PlayerSelectController';
+import { PointCollectionController } from '03-domain/view-controller/PointCollectionController';
+import { PointLimitController } from '03-domain/view-controller/PointLimitController';
 
-import { GameStartController } from '05-widgets/controllers/GameStartController';
-import { PlayerSelectController } from '05-widgets/controllers/PlayerSelectController';
-import { PointCollectionController } from '05-widgets/controllers/PointCollectionController';
-import { PointLimitController } from '05-widgets/controllers/PointLimitController';
-import {
-	RoundController,
-	RoundCompletedReason
-} from '05-widgets/controllers/RoundController';
-import { LeaderboardController } from '05-widgets/controllers/LeaderboardController';
-import { LeaderboardFlyInController } from '05-widgets/controllers/LeaderboardFlyInController';
+import { RoundController, TurnReport } from '03-domain/round-controller';
+import { LeaderboardController } from '03-domain/view-controller/LeaderboardController';
+import { LeaderboardFlyInController } from '03-domain/view-controller/LeaderboardFlyInController';
 
 import {
 	showGameWinnerDialog,
 	showLastRoundDialog,
 	showRoundWinnerDialog,
 	showTurnPlayedDialog
-} from '05-widgets/dialog';
+} from '03-domain/dialog';
+import { ManagedViewController } from '01-global/interface/ManagedViewController';
+import { RoundStatus } from '01-global/enum/RoundCompletedReason';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {
@@ -33,17 +31,7 @@ interface Configuration {
 	limitReached: boolean;
 	pointsLimit: number;
 	round: number;
-	roundReason: RoundCompletedReason;
 	startingPlayer: PlayerSummary | null;
-}
-
-enum StepId {
-	Names = 'names',
-	PlayerSelect = 'player-select',
-	PointsLimit = 'points-limit',
-	Round = 'round',
-	Collection = 'collection',
-	Leaderboard = 'leader-board'
 }
 
 /* == CONST ================================================================= */
@@ -51,54 +39,8 @@ const config: Configuration = {
 	limitReached: false,
 	pointsLimit: 0,
 	round: 1,
-	roundReason: RoundCompletedReason.RoundWon,
 	startingPlayer: null
 };
-
-// const dialogId = {
-// 	gameWinner: 'game-winner',
-// 	lastRound: 'last-round',
-// 	roundWinner: 'round-winner',
-// 	turnPlayed: 'turn-played'
-// };
-
-// const dialog = new Dialog();
-
-// const debugPlayers: PlayerSummary[] = [
-// 	{
-// 		hasEmptyHand: false,
-// 		id: Symbol('Player__0'),
-// 		isActive: true,
-// 		name: 'Player 1',
-// 		score: 10,
-// 		tileCount: 1
-// 	},
-// 	{
-// 		hasEmptyHand: true,
-// 		id: Symbol('Player__1'),
-// 		isActive: false,
-// 		name: 'Player 2',
-// 		score: 17,
-// 		tileCount: 1
-// 	},
-// 	{
-// 		hasEmptyHand: false,
-// 		id: Symbol('Player__2'),
-// 		isActive: false,
-// 		name: 'Player 3',
-// 		score: 3,
-// 		tileCount: 1
-// 	},
-// 	{
-// 		hasEmptyHand: false,
-// 		id: Symbol('Player__2'),
-// 		isActive: false,
-// 		name: 'Player 4',
-// 		score: 7,
-// 		tileCount: 1
-// 	}
-// ];
-
 const playerManager = PlayerManager.instance;
 const navigationManager = new NavigationManager(
 	[
@@ -126,14 +68,12 @@ function onInstanceActivated(step: Step): void {
 			(step.instance as PointCollectionController).setPlayers(
 				playerManager.players
 			);
-			// (step.instance as PointCollectionController).setPlayers(debugPlayers);
 			break;
 
 		case StepId.Leaderboard:
 			(step.instance as LeaderboardController).showLeaderboard(
 				playerManager.players
 			);
-			// (step.instance as LeaderboardController).showLeaderboard(debugPlayers);
 			break;
 
 		case StepId.PlayerSelect:
@@ -145,8 +85,7 @@ function onInstanceActivated(step: Step): void {
 			break;
 
 		case StepId.Round:
-			// (step.instance as RoundController).start(Symbol());
-			(step.instance as RoundController).start(config.startingPlayer.id);
+			(step.instance as RoundController).startRound(playerManager.numberOfPlayers);
 			break;
 	}
 }
@@ -175,12 +114,12 @@ function onPointLimitSet(points: number): void {
 	navigationManager.goForward();
 }
 
-function onRoundCompleted(): void {
-	if (config.roundReason === RoundCompletedReason.RoundWon) {
-		playerManager.updateActivePlayerScore(getRoundBonus());
-	}
-	navigationManager.goForward();
-}
+// function onRoundCompleted(): void {
+// 	if (config.roundReason === RoundCompletedReason.RoundWon) {
+// 		playerManager.updateActivePlayerScore(getRoundBonus());
+// 	}
+// 	navigationManager.goForward();
+// }
 
 function onRoundWinnerDialogClosed(): void {
 	if (config.limitReached) {
@@ -205,27 +144,40 @@ function onStartingPlayerSecondaryAction(): void {
 
 function onStartingPlayerSelected(player: PlayerSummary): void {
 	config.startingPlayer = player;
+	playerManager.setActivePlayer(player.id);
 	playerManager.resetTileCount();
 
 	navigationManager.goForward();
 }
 
-function onTurnSubmitted(turn: TurnSummary): void {
-	const canShowLimitDialog = !config.limitReached;
-	const currentPlayer = playerManager.activePlayer;
+function onTurnSubmitted(report: TurnReport): void {
+	if (report.state !== RoundStatus.InProgress) {
+		if (report.state === RoundStatus.Won) {
+			playerManager.updateActivePlayerScore(getRoundBonus());
+		}
+		navigationManager.goForward();
 
-	config.limitReached =
-		config.limitReached || playerManager.activePlayer.score >= config.pointsLimit;
+		return;
+	}
+
+	const canShowLimitDialog = !config.limitReached;
+	const activePlayer = playerManager.activePlayer as PlayerSummary;
+	config.limitReached ||=
+		(playerManager.activePlayer?.score ?? 0) >= config.pointsLimit;
 	const onClose =
 		canShowLimitDialog && config.limitReached
-			? () => onTurnPlayedDialogClosed(currentPlayer)
-			: undefined;
+			? () => onTurnPlayedDialogClosed(activePlayer)
+			: playNextTurn;
 
-	showTurnPlayedDialog(playerManager.activePlayer, turn.scoreDelta, onClose);
+	showTurnPlayedDialog(activePlayer, report.scoreDelta, onClose);
 }
 
 function onTurnPlayedDialogClosed(currentPlayer: PlayerSummary): void {
-	showLastRoundDialog(currentPlayer.name, config.pointsLimit);
+	setTimeout(
+		() =>
+			showLastRoundDialog(currentPlayer.name, config.pointsLimit, playNextTurn),
+		0
+	);
 }
 
 function onStartNewGame(): void {
@@ -233,8 +185,8 @@ function onStartNewGame(): void {
 }
 
 /* == PRIVATE METHODS ======================================================= */
-function instanceFactory(id: string): BaseController | null {
-	// eslint-disable-line complexity
+/* eslint-disable complexity */
+function instanceFactory(id: string): ManagedViewController | null {
 	switch (id) {
 		case StepId.Collection:
 			return initCollectionController();
@@ -258,6 +210,7 @@ function instanceFactory(id: string): BaseController | null {
 			return null;
 	}
 }
+/* eslint-enable complexity */
 
 function isFirstRound(): boolean {
 	return config.round === 1;
@@ -268,6 +221,15 @@ function showLeaderboardFlyin(showTiles = false): void {
 }
 
 /* == INIT ================================================================== */
+function playNextTurn(): void {
+	const activeStep = navigationManager.activeStep;
+	if (activeStep === undefined || activeStep.instance === undefined) {
+		return;
+	}
+
+	(activeStep.instance as RoundController).continueRound();
+}
+
 function init(): void {
 	const leaderboardFlyoutBase = document.querySelector(
 		'.js-leaderboard-fly-out'
@@ -378,15 +340,16 @@ function initRoundController(): RoundController | null {
 	return base === null
 		? null
 		: new RoundController(base, {
-				onRoundCompleted: onRoundCompleted,
 				onShowLeaderboard: () => showLeaderboardFlyin(true),
-				onTurnSubmitted: onTurnSubmitted,
-				selectors: {
-					flyOut: '.js-round__fly-out',
-					flyOutClose: '.js-round__fly-out-close',
-					leaderboard: '.js-round__leaderboard'
-				}
+				onTurnSubmitted: onTurnSubmitted
 		  });
+	// return base === null
+	// 	? null
+	// 	: new RoundController(base, {
+	// 			onRoundCompleted: onRoundCompleted,
+	// 			onShowLeaderboard: () => showLeaderboardFlyin(true),
+	// 			onTurnSubmitted: onTurnSubmitted
+	// 	  });
 }
 
 function preparePlayerSelect(instance: PlayerSelectController): void {
