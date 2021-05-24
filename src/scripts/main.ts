@@ -1,5 +1,9 @@
 import { RoundStatus, StepId } from '01-global/enum';
-import { PlayerSummary, RemainingPoints } from '01-global/interface';
+import {
+	ManagedViewController,
+	PlayerSummary,
+	RemainingPoints
+} from '01-global/interface';
 
 import { NavigationManager, Step } from '01-global/manager/NavigationManager';
 import { PlayerManager } from '01-global/manager/PlayerManager';
@@ -7,13 +11,11 @@ import { getInitialTileCount, getRoundBonus } from '01-global/utility/rules';
 import { awardRemainingPoints } from '01-global/utility/scoring';
 
 import { GameStartController } from '03-domain/view-controller/GameStartController';
+import { LeaderboardController } from '03-domain/view-controller/LeaderboardController';
+import { LeaderboardFlyInController } from '03-domain/view-controller/LeaderboardFlyInController';
 import { PlayerSelectController } from '03-domain/view-controller/PlayerSelectController';
 import { PointCollectionController } from '03-domain/view-controller/PointCollectionController';
 import { PointLimitController } from '03-domain/view-controller/PointLimitController';
-
-import { RoundController, TurnReport } from '03-domain/round-controller';
-import { LeaderboardController } from '03-domain/view-controller/LeaderboardController';
-import { LeaderboardFlyInController } from '03-domain/view-controller/LeaderboardFlyInController';
 
 import {
 	showGameWinnerDialog,
@@ -21,7 +23,7 @@ import {
 	showRoundWinnerDialog,
 	showTurnPlayedDialog
 } from '03-domain/dialog';
-import { ManagedViewController } from '01-global/interface';
+import { RoundController, TurnReport } from '03-domain/round-controller';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {
