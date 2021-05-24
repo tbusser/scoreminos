@@ -7,13 +7,6 @@ export enum TurnType {
 	Default = 'default',
 
 	/**
-	 * In the collection state all controls except the number pad will be
-	 * hidden. It is meant to collect the points each player has left at the
-	 * end of a round so the points can be added to the score of the winner.
-	 */
-	Collection = 'collection',
-
-	/**
 	 * In the round start only the number pad and the control to indicate a trio
 	 * has been played will be displayed.
 	 */
