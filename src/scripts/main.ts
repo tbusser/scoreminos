@@ -348,13 +348,6 @@ function initRoundController(): RoundController | null {
 				onShowLeaderboard: () => showLeaderboardFlyin(true),
 				onTurnSubmitted: onTurnSubmitted
 		  });
-	// return base === null
-	// 	? null
-	// 	: new RoundController(base, {
-	// 			onRoundCompleted: onRoundCompleted,
-	// 			onShowLeaderboard: () => showLeaderboardFlyin(true),
-	// 			onTurnSubmitted: onTurnSubmitted
-	// 	  });
 }
 
 function preparePlayerSelect(instance: PlayerSelectController): void {
