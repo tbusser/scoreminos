@@ -43,8 +43,7 @@ export class LeaderboardFlyInController {
 		}
 
 		this.flyOutController = new FlyIn(this.base, {
-			background: background ?? undefined,
-			onHidden: () => (this.base.hidden = true)
+			background: background ?? undefined
 		});
 	}
 
@@ -58,7 +57,6 @@ export class LeaderboardFlyInController {
 			includeTiles
 		});
 
-		this.base.hidden = false;
-		setTimeout(() => this.flyOutController?.show(), 0);
+		this.flyOutController?.show();
 	}
 }
