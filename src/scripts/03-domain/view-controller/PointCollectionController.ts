@@ -1,23 +1,17 @@
-/**
- * TODO:
- * - Restore header title after setting points
- */
-
 import { PlayerSummary, RemainingPoints } from '01-global/interface';
 import { bind } from '01-global/decorator/bind';
 import { updateMessageVisibility } from '01-global/utility/error-message';
 import { FlyIn } from '02-components/FlyIn';
 import { BaseController } from '02-components/BaseViewController';
 import { NumberEntry } from '02-components/NumberEntry';
+import { createPlayerButton } from '02-components/player-points-button';
 
 /* == INTERFACES ============================================================ */
 interface Configuration {
+	flyInBackground?: HTMLElement;
 	isVisible: boolean;
 	onPointsCollected: (points: RemainingPoints[]) => void;
 	selectors: Selectors;
-	translations: {
-		headerPrompt: string;
-	};
 	warningId: string;
 }
 
@@ -28,6 +22,9 @@ interface Player {
 }
 
 interface Selectors {
+	cancelSetPoints: string;
+	flyInPortal: string;
+	flyInTitle: string;
 	flyOut: string;
 	numberEntry: string;
 	playerList: string;
@@ -48,12 +45,18 @@ export class PointCollectionController extends BaseController {
 	}
 
 	/* -- FIELDS ------------------------------------------------------------ */
-	private flyIn: FlyIn;
-	private numberEntry: NumberEntry;
-	private players: Player[];
-	private selectedPlayer: Player;
+	private flyIn?: FlyIn;
+	private flyInTitle: HTMLElement | null = null;
+	private numberEntry: NumberEntry | null = null;
+	private players?: Player[];
+	private selectedPlayer: Player | undefined;
 
 	/* -- EVENT HANDLING ---------------------------------------------------- */
+	@bind
+	private onCancelSetPoints(event: Event): void {
+		this.flyIn?.hide();
+	}
+
 	@bind
 	private onClicked(event: MouseEvent): void {
 		const playerId = (event.target as HTMLElement)
@@ -64,27 +67,29 @@ export class PointCollectionController extends BaseController {
 			return;
 		}
 
-		this.selectedPlayer = this.players.find(player => player.id === playerId);
+		this.selectedPlayer = this.players?.find(player => player.id === playerId);
 		if (this.selectedPlayer === undefined) {
 			return;
 		}
 
-		this.numberEntry.value = this.selectedPlayer.points ?? 0;
+		this.prepareFlyInView();
+		this.showFlyIn();
+	}
 
-		this.header.title = this.selectedPlayer.summary.name;
-		this.footer.primaryEnabled = false;
-		this.flyIn?.show();
+	@bind
+	private onFlyInHidden(): void {
+		if (this.flyIn) {
+			this.base.appendChild(this.flyIn.base);
+		}
 	}
 
 	@bind
 	private onSetPoints(): void {
-		if (this.numberEntry.value !== 0) {
-			this.selectedPlayer.points = this.numberEntry.value;
+		if (this.numberEntry?.value !== 0 && this.selectedPlayer) {
+			this.selectedPlayer.points = this.numberEntry?.value;
 		}
 		this.renderPlayersList();
 		this.flyIn?.hide();
-		this.header.title = this.config.translations.headerPrompt;
-		this.footer.primaryEnabled = true;
 	}
 
 	protected onPrimaryAction(): void {
@@ -97,85 +102,106 @@ export class PointCollectionController extends BaseController {
 			return;
 		}
 
-		const result = this.players.map(({ points, summary: { id } }) => ({
-			id,
-			points
-		}));
+		const result =
+			this.players?.map(({ points, summary: { id } }) => ({
+				id,
+				points: points ?? 0
+			})) ?? [];
 		this.config.onPointsCollected?.(result);
 	}
 
 	/* -- PRIVATE METHODS --------------------------------------------------- */
 	private getPlayersWithoutPoints(): Player[] {
-		return this.players.filter(({ points, summary: { hasEmptyHand } }) => {
-			return (points ?? 0) === 0 && !hasEmptyHand;
-		});
+		return this.players === undefined
+			? []
+			: this.players.filter(({ points, summary: { hasEmptyHand } }) => {
+					return (points ?? 0) === 0 && !hasEmptyHand;
+			  });
 	}
 
 	private renderPlayer(player: Player): string {
-		const {
-			id,
-			points,
-			summary: { hasEmptyHand, name }
-		} = player;
+		const { id, points, summary } = player;
 
 		return `<li>
-			<button
-				type="button"
-				class="o-structure o-structure--vertical-center c-score-button"
-				data-id="${id}"
-				${hasEmptyHand ? 'disabled' : ''}
-			>
-				<p class="o-structure o-structure--vertical o-structure--grow">
-					<span class="c-score-button__name">${name}</span>
-					${hasEmptyHand ? '<span>Round winner</span>' : ''}
-					${points === undefined ? '<span>No points set</span>' : ''}
-				</p>
-				${(points ?? 0) === 0 ? '' : `<p class="c-score-button__score">${points}</p>`}
-				${hasEmptyHand ? '' : '<p class="c-score-button__chevron">❯</p>'}
-			</button>
+			${createPlayerButton(id, summary, points)}
 		</li>`;
 	}
 
 	private renderPlayersList(): void {
 		const listElement = this.base.querySelector(this.config.selectors.playerList);
-		if (listElement === null) {
+		if (listElement === null || this.players === undefined) {
 			return;
 		}
 
 		listElement.innerHTML = this.players
-			.map(player => this.renderPlayer(player))
+			?.map(player => this.renderPlayer(player))
 			.join('');
 	}
 
 	private setup(): void {
-		const flyInBase = this.base.querySelector(
-			this.config.selectors.flyOut
-		) as HTMLElement;
-		if (flyInBase !== null) {
-			this.flyIn = new FlyIn(flyInBase);
-		}
+		this.setupFlyIn();
 
 		const numberEntryBase = this.base.querySelector(
 			this.config.selectors.numberEntry
 		) as HTMLElement;
-		if (numberEntryBase !== null) {
-			this.numberEntry = new NumberEntry(numberEntryBase, {
-				defaultPoints: 0,
-				selectors: {
-					display: '.js-number-entry__display',
-					numberPad: '.js-number-entry__number-pad'
-				}
-			});
-		}
+		this.numberEntry =
+			numberEntryBase === null
+				? null
+				: new NumberEntry(numberEntryBase, {
+						defaultPoints: 0,
+						selectors: {
+							display: '.js-number-entry__display',
+							numberPad: '.js-number-entry__number-pad'
+						}
+				  });
 
-		const setPointsButton = this.base.querySelector(
-			this.config.selectors.setPoints
-		);
-		if (setPointsButton !== null) {
-			setPointsButton.addEventListener('click', this.onSetPoints);
-		}
 		this.base.addEventListener('click', this.onClicked);
 		this.isVisible = this.config.isVisible;
+	}
+
+	private prepareFlyInView(): void {
+		if (this.numberEntry) {
+			this.numberEntry.value = this.selectedPlayer?.points ?? 0;
+		}
+		if (this.flyInTitle) {
+			this.flyInTitle.textContent = this.selectedPlayer?.summary.name ?? '';
+		}
+	}
+
+	private setupFlyIn(): void {
+		const flyInBase = this.base.querySelector(
+			this.config.selectors.flyOut
+		) as HTMLElement;
+		if (flyInBase === null) {
+			return;
+		}
+
+		this.flyIn = new FlyIn(flyInBase, {
+			background: this.config.flyInBackground,
+			onHidden: this.onFlyInHidden
+		});
+
+		this.flyInTitle = this.base.querySelector(this.config.selectors.flyInTitle);
+
+		this.base
+			.querySelector(this.config.selectors.setPoints)
+			?.addEventListener('click', this.onSetPoints);
+		this.base
+			.querySelector(this.config.selectors.cancelSetPoints)
+			?.addEventListener('click', this.onCancelSetPoints);
+	}
+
+	private showFlyIn(): void {
+		if (this.flyIn === undefined) {
+			return;
+		}
+
+		// The fly-in needs to be moved to the portal to make sure the UI looks
+		// like it is intended.
+		document
+			.querySelector(this.config.selectors.flyInPortal)
+			?.appendChild(this.flyIn.base);
+		this.flyIn.show();
 	}
 
 	private updateWarningVisibility(hide: boolean): void {

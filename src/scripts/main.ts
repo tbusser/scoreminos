@@ -260,16 +260,17 @@ function initCollectionController(): PointCollectionController | null {
 	return base === null
 		? null
 		: new PointCollectionController(base, {
+				flyInBackground: document.querySelector('main') ?? undefined,
 				isVisible: false,
 				onPointsCollected: onPointsCollected,
 				selectors: {
+					cancelSetPoints: '.js-point-collection__cancel-points',
 					flyOut: '.js-point-collection__fly-out',
+					flyInPortal: '#fly-in-portal',
+					flyInTitle: '.js-point-collection__fly-out-title',
 					numberEntry: '.js-point-collection__number-entry',
 					playerList: '.js-point-collection__list',
 					setPoints: '.js-point-collection__set-points'
-				},
-				translations: {
-					headerPrompt: 'Select a player'
 				},
 				warningId: 'warning-points-missing'
 		  });

@@ -13,17 +13,26 @@
 		<p class="js-message c-message c-message--warning" id="warning-points-missing" hidden>
 			Please specify the number of points each player has left.
 		</p>
-		<div class="js-point-collection__fly-out o-fly-in c-view">
-			<div class="js-point-collection__number-entry">
-				<include src="./partials/number-entry.html"></include>
-			</div>
-			<div style="margin-top: 20px; text-align: center;">
-				<button style="width: 50%" type="button" class="js-point-collection__set-points c-button c-button--primary">Set points</button>
-			</div>
-		</div>
 	</div>
 	<article class="js-footer o-view__footer c-footer">
 		<span></span>
 		<button type="button" class="js-footer__primary c-button c-button--primary">Next</button>
+	</article>
+	<article class="js-point-collection__fly-out o-fly-in o-fly-in--bottom c-fly-in-dialog" hidden>
+		<header class="c-header c-header--has-action c-header--no-shadow">
+			<button type="button" class="js-point-collection__cancel-points c-button c-header__secondary c-button--primary-outline c-button--no-border"">
+				Cancel
+			</button>
+			<h1 class="js-point-collection__fly-out-title c-header__title">Leaderboard</h1>
+			<button type="button" class="js-point-collection__set-points c-button c-header__primary c-button--primary-outline c-button--no-border"">
+				Save
+			</button>
+		</header>
+
+		<div class="c-fly-in-dialog__content">
+			<div class="js-point-collection__number-entry">
+				<include src="./partials/number-entry.html"></include>
+			</div>
+		</div>
 	</article>
 </article>
