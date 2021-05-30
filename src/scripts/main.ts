@@ -147,7 +147,7 @@ function onStartingPlayerSelected(player: PlayerSummary): void {
 function onTurnSubmitted(report: TurnReport): void {
 	const summary = addScoreForActivePlayer(report);
 
-	if (report.state !== RoundStatus.InProgress) {
+	if (playerManager.activePlayer?.hasEmptyHand) {
 		navigationManager.goForward();
 
 		return;

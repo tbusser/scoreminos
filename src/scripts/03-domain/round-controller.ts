@@ -1,9 +1,8 @@
 import { bind } from '01-global/decorator/bind';
-import { ManagedViewController, Turn, TurnSummary } from '01-global/interface';
+import { ManagedViewController, Turn } from '01-global/interface';
 import { RoundStatus, TurnType } from '01-global/enum';
 
 import { PlayerManager } from '01-global/manager/PlayerManager';
-import { scoreTurn } from '01-global/utility/scoring';
 
 import { RoundController as RoundViewController } from '03-domain/view-controller/TurnController';
 
@@ -77,8 +76,6 @@ export class RoundController implements ManagedViewController {
 	private determineStatus(): void {
 		if (this.passedTurnStreak === this.maxPassedTurnStreak) {
 			this.status = RoundStatus.Locked;
-		} else if (playerManager.activePlayer?.hasEmptyHand) {
-			this.status = RoundStatus.Won;
 		}
 	}
 
